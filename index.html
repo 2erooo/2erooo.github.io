@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2ero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8F8F4;
+            --text: #1A1A1A;
+            --text-dim: #666666;
+            --text-faint: #999999;
+            --border: #E0E0D8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        body {
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            font-weight: 300;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 2;
+            letter-spacing: 0.04em;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 1800px; width: 100%; margin: 0 auto; padding: 0 48px; }
+        .header { padding: 32px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .header-logo { font-size: 1.3rem; font-weight: 400; letter-spacing: 0.12em; text-decoration: none; color: var(--text); }
+        .header-links { display: flex; gap: 36px; }
+        .header-links a { color: var(--text-dim); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 400; transition: color 0.3s; }
+        .header-links a:hover { color: var(--text); }
+        .video-section { padding: 40px 0 80px; overflow: hidden; }
+        .video-layout { display: grid; grid-template-columns: 1fr 260px; gap: 12px; }
+        .video-main { position: relative; overflow: hidden; background: #E8E8E0; }
+        .video-main::before { content: ''; display: block; padding-bottom: 56.25%; }
+        .video-main iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-sidebar { display: flex; flex-direction: column; background: var(--border); overflow: hidden; }
+        .video-thumb { flex: 1; position: relative; cursor: pointer; overflow: hidden; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .video-thumb:last-child { border-bottom: none; }
+        .video-thumb iframe { width: 100%; height: 100%; border: none; pointer-events: none; display: block; }
+        .video-thumb .thumb-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; font-size: 1.5rem; color: white; text-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .video-thumb:hover .thumb-overlay { opacity: 1; }
+        .video-thumb.active { border-left: 2px solid var(--text); }
+        .intro { padding: 0 0 80px; max-width: 100%; }
+        .intro p { font-size: 0.95rem; margin-bottom: 28px; color: var(--text-dim); line-height: 2.2; }
+        .intro strong { color: var(--text); font-weight: 500; }
+        .intro .en { font-size: 0.85rem; color: var(--text-faint); line-height: 2; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+        .contact { padding: 60px 0; border-top: 1px solid var(--border); }
+        .contact-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 40px; }
+        .contact-links { display: flex; flex-direction: column; gap: 4px; }
+        .contact-links a { color: var(--text); text-decoration: none; font-size: 0.95rem; letter-spacing: 0.04em; transition: opacity 0.3s; display: inline-flex; align-items: center; gap: 6px; font-weight: 400; }
+        .contact-links a:hover { opacity: 0.5; }
+        .contact-links .handle { font-size: 0.7rem; color: var(--text-faint); margin-bottom: 16px; }
+        .contact-qr { display: flex; gap: 20px; }
+        .contact-qr-item { text-align: center; }
+        .contact-qr-item img { width: 110px; height: 110px; border: 1px solid var(--border); display: block; margin-bottom: 6px; }
+        .contact-qr-item span { font-size: 0.65rem; color: var(--text-faint); letter-spacing: 0.06em; }
+        .footer { padding: 40px 0 60px; text-align: center; font-size: 0.7rem; color: var(--text-faint); }
+        .footer a { color: var(--text); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            body { font-size: 0.5rem; letter-spacing: 0.015em; line-height: 1.6; }
+            .header { padding: 20px 0; }
+            .header-logo { font-size: 0.65rem; }
+            .header-links { gap: 18px; }
+            .header-links a { font-size: 0.45rem; }
+            .video-section { padding: 20px 0 40px; }
+            .video-layout { grid-template-columns: 1fr; gap: 8px; }
+            .video-sidebar { display: flex; flex-direction: row; gap: 8px; overflow-x: auto; background: none; padding: 4px 0; }
+            .video-sidebar::-webkit-scrollbar { display: none; }
+            .video-thumb { flex: 0 0 140px; border-bottom: none; aspect-ratio: 16/9; border-radius: 2px; }
+            .video-thumb iframe { pointer-events: none; border-radius: 2px; }
+            .intro { padding: 0 0 40px; }
+            .intro p { font-size: 0.48rem; margin-bottom: 10px; line-height: 1.7; }
+            .intro .en { font-size: 0.4rem; margin-top: 14px; padding-top: 10px; line-height: 1.5; }
+            .contact { padding: 32px 0; }
+            .contact-row { flex-direction: column; gap: 24px; }
+            .contact-links a { font-size: 0.5rem; }
+            .contact-links .handle { font-size: 0.38rem; }
+            .contact-qr { gap: 12px; }
+            .contact-qr-item img { width: 60px; height: 60px; }
+            .contact-qr-item span { font-size: 0.38rem; }
+            .footer { padding: 16px 0 24px; font-size: 0.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 12px; }
+            body { font-size: 0.45rem; }
+            .intro p { font-size: 0.42rem; }
+            .intro .en { font-size: 0.35rem; }
+            .header-links { gap: 12px; }
+            .header-links a { font-size: 0.4rem; }
+        }
+        /* Radio: audio-only archive, using the official NetEase player. */
+        .radio { padding: 0 0 80px; scroll-margin-top: 32px; }
+        .radio-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-bottom: 24px; }
+        .radio-heading h2 { font-size: 1.1rem; font-weight: 400; letter-spacing: .12em; }
+        .radio-heading span { font-size: .7rem; color: var(--text-faint); letter-spacing: .08em; }
+        .radio-tabs { display: flex; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .radio-tab { flex: 1; position: relative; padding: 22px 12px; border: 0; background: transparent; color: var(--text-dim); font: inherit; font-size: .85rem; cursor: pointer; text-align: left; }
+        .radio-tab:first-child { padding-left: 0; }
+        .radio-tab[aria-selected="true"] { color: var(--text); }
+        .radio-tab[aria-selected="true"]::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 24px; height: 2px; background: var(--text); }
+        .radio-tab small { display: block; margin-top: 4px; font-size: .65rem; letter-spacing: .04em; color: var(--text-faint); }
+        .radio-panel { display: grid; grid-template-columns: minmax(230px, .8fr) minmax(0, 1.2fr); gap: 64px; padding-top: 32px; }
+        .radio-description p { font-size: .85rem; line-height: 2; color: var(--text-dim); }
+        .radio-description .radio-en { font-size: .75rem; color: var(--text-faint); margin-top: 16px; line-height: 1.9; letter-spacing: .02em; }
+        .radio-episodes { list-style: none; }
+        .radio-episode { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 0; border-bottom: 1px solid var(--border); padding: 18px 0; color: var(--text-dim); background: transparent; font: inherit; text-align: left; cursor: pointer; }
+        .radio-episodes li:first-child .radio-episode { padding-top: 0; }
+        .radio-episode[aria-pressed="true"] { color: var(--text); }
+        .radio-episode strong { font-size: .9rem; font-weight: 400; letter-spacing: .025em; }
+        .radio-episode small { display: block; font-size: .65rem; color: var(--text-faint); margin-top: 4px; }
+        .radio-episode time { font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .radio-episode[aria-pressed="true"] strong::before { content: '●'; font-size: .5rem; margin-right: 10px; vertical-align: middle; }
+        .radio-player { margin-top: 24px; }
+        .radio-player iframe { display: block; width: 100%; height: 86px; border: 0; }
+        .radio-player-caption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .65rem; color: var(--text-faint); margin-top: 8px; }
+        .radio-player-caption a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 4px; }
+        .radio-empty { font-size: .8rem; color: var(--text-faint); padding: 12px 0 32px; }
+        .radio [hidden] { display: none !important; }
+        .radio button:focus-visible, .radio a:focus-visible { outline: 2px solid var(--text); outline-offset: 5px; }
+        @media (max-width: 768px) {
+            .radio { padding-bottom: 48px; }
+            .radio-heading { padding-bottom: 16px; }
+            .radio-heading h2 { font-size: 1rem; }
+            .radio-heading span { font-size: .65rem; }
+            .radio-tab { padding: 18px 6px; font-size: .76rem; letter-spacing: 0; }
+            .radio-tab small { font-size: .62rem; }
+            .radio-tab[aria-selected="true"]::after { right: 8px; }
+            .radio-panel { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
+            .radio-description p { font-size: .84rem; }
+            .radio-description .radio-en { font-size: .75rem; margin-top: 12px; }
+            .radio-player-caption { font-size: .7rem; }
+        }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="/" class="header-logo">2ero</a>
+        <div class="header-links">
+            <a href="#radio">Radio</a>
+            <a href="https://www.instagram.com/2eroo_/" target="_blank">Instagram</a>
+            <a href="https://soundcloud.com/defen-waste" target="_blank">SoundCloud</a>
+            <a href="https://linktr.ee/2ero" target="_blank">Linktree</a>
+        </div>
+    </header>
+    <section class="video-section">
+        <div class="video-layout">
+            <div class="video-main" id="playerContainer">
+                <iframe id="mainPlayer" src="https://player.bilibili.com/player.html?bvid=BV1CBYSzjEKq&page=1&high_quality=1&autoplay=0" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-sidebar" id="playlist">
+                <div class="video-thumb active" data-src="https://player.bilibili.com/player.html?bvid=BV1CBYSzjEKq&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1CBYSzjEKq&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+                <div class="video-thumb" data-src="https://player.bilibili.com/player.html?bvid=BV1bhZHB9EB4&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1bhZHB9EB4&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+                <div class="video-thumb" data-src="https://player.bilibili.com/player.html?bvid=BV1G37v6eE1t&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1G37v6eE1t&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+                <div class="video-thumb" data-src="https://player.bilibili.com/player.html?bvid=BV1MpZ4BvEWR&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1MpZ4BvEWR&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+                <div class="video-thumb" data-src="https://player.bilibili.com/player.html?bvid=BV1BqraYAEwN&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1BqraYAEwN&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+                <div class="video-thumb" data-src="https://player.bilibili.com/player.html?bvid=BV1q5X2YeECx&page=1&high_quality=1&autoplay=0">
+                    <iframe src="https://player.bilibili.com/player.html?bvid=BV1q5X2YeECx&page=1&high_quality=1&autoplay=0" loading="lazy"></iframe>
+                    <div class="thumb-overlay">&#9654;</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="radio" id="radio" aria-labelledby="radio-title">
+        <div class="radio-heading">
+            <h2 id="radio-title">Radio / 电台</h2>
+            <span>Selected &amp; mixed by 2ero</span>
+        </div>
+        <div class="radio-tabs" role="tablist" aria-label="电台频道">
+            <button class="radio-tab" id="tab-positive" type="button" role="tab" aria-selected="false" aria-controls="radio-panel" tabindex="-1" data-channel="positive">Positive Space<small>结构与秩序</small></button>
+            <button class="radio-tab" id="tab-negative" type="button" role="tab" aria-selected="false" aria-controls="radio-panel" tabindex="-1" data-channel="negative">Negative Space<small>留白与纵深</small></button>
+            <button class="radio-tab" id="tab-neutral" type="button" role="tab" aria-selected="true" aria-controls="radio-panel" tabindex="0" data-channel="neutral">Neutral Space<small>平衡与流动</small></button>
+        </div>
+        <div class="radio-panel" id="radio-panel" role="tabpanel" aria-labelledby="tab-neutral" tabindex="0">
+            <div class="radio-description" aria-live="polite">
+                <p id="radio-description-zh">在规整与错位之间，寻找流动中的平衡。碎拍交织，节奏轻盈游移，为意料之外的转向留下空间。</p>
+                <p class="radio-en" id="radio-description-en" lang="en">Between regular patterns and rhythmic shifts, balance emerges through movement. Broken beats intertwine, rhythms move playfully, and unexpected turns find room to unfold.</p>
+            </div>
+            <div class="radio-listening">
+                <ul class="radio-episodes" id="radio-episodes" aria-label="Neutral Space 节目">
+                    <li><button class="radio-episode" type="button" aria-pressed="true" data-program="3731920185"><span><strong>Neutral Space #002</strong><small>Neither here nor there.</small></span><time>1:08:21</time></button></li>
+                    <li><button class="radio-episode" type="button" aria-pressed="false" data-program="3731702831"><span><strong>Neutral Space #001</strong><small>从冰冰老师的新歌开始。</small></span><time>1:00:47</time></button></li>
+                </ul>
+                <p class="radio-empty" id="radio-empty" hidden>这个频道的节目尚未加入本站。</p>
+                <div class="radio-player" id="radio-player">
+                    <iframe id="radio-frame" title="Neutral Space #002 网易云音频播放器" src="https://music.163.com/outchain/player?type=3&amp;id=3731920185&amp;auto=0&amp;height=66" loading="lazy" allow="autoplay"></iframe>
+                    <div class="radio-player-caption"><span>点击播放器收听</span><a id="radio-source" href="https://music.163.com/program?id=3731920185" target="_blank" rel="noopener noreferrer">在网易云收听 ↗</a></div>
+                </div>
+                <noscript><p><a href="https://music.163.com/program?id=3731702831">收听 Neutral Space #001</a></p></noscript>
+            </div>
+        </div>
+    </section>
+    <section class="intro">
+        <p>2ero &#x81ea;&#x5e7c;&#x5b66;&#x4e60;&#x5c0f;&#x63d0;&#x7434;&#xff0c;&#x7535;&#x5b50;&#x97f3;&#x4e50;&#x8ba9;&#x4ed6;&#x91cd;&#x65b0;&#x5efa;&#x7acb;&#x4e86;&#x5bf9;&#x58f0;&#x97f3;&#x3001;&#x7a7a;&#x95f4;&#x4e0e;&#x611f;&#x77e5;&#x7684;&#x7406;&#x89e3;&#x3002;</p>
+        <p>&#x4ed6;&#x7684;&#x97f3;&#x4e50;&#x5b9e;&#x8df5;&#x6839;&#x690d;&#x4e8e; Leftfield Electronic Music&#x3001;Bass Culture &#x4e0e; Experimental Club Sounds&#xff0c;&#x5728; Techno&#x3001;Bass Music&#x3001;IDM&#x3001;Dub &#x4e0e; Ambient &#x4e4b;&#x95f4;&#x81ea;&#x7531;&#x6e38;&#x8d70;&#x3002;</p>
+        <p>&#x4f5c;&#x4e3a; OFlowers &#x4e0e; OFlowers Surfskate Club &#x7684;&#x521b;&#x59cb;&#x4eba;&#xff0c;&#x4ed6;&#x957f;&#x671f;&#x81f4;&#x529b;&#x4e8e;&#x63a8;&#x52a8;&#x8fd0;&#x52a8;&#x6587;&#x5316;&#x3001;&#x7535;&#x5b50;&#x97f3;&#x4e50;&#x4e0e;&#x9752;&#x5e74;&#x793e;&#x7fa4;&#x4e4b;&#x95f4;&#x7684;&#x878d;&#x5408;&#x53d1;&#x5c55;&#x3002;</p>
+        <div class="en">Raised through years of classical violin training, 2ero discovered electronic music as a way to reshape his understanding of sound, space and perception. His practice draws from Leftfield Electronic Music, Bass Culture and Experimental Club Sounds &#x2014; moving freely between Techno, Bass Music, IDM, Dub and Ambient. As the founder of OFlowers and OFlowers Surfskate Club, he focuses on connecting movement, music and contemporary youth culture through community-driven projects and events.</div>
+    </section>
+    <section class="contact">
+        <div class="contact-row">
+            <div class="contact-links">
+                <a href="https://www.instagram.com/2eroo_/" target="_blank">Instagram &#8599;</a>
+                <div class="handle">@2eroo_</div>
+                <a href="https://soundcloud.com/defen-waste" target="_blank">SoundCloud &#8599;</a>
+                <div class="handle">soundcloud.com/defen-waste</div>
+                <a href="https://linktr.ee/2ero" target="_blank">Linktree &#8599;</a>
+                <div class="handle">All platforms &amp; links</div>
+                <a href="https://space.bilibili.com/353791121" target="_blank">Bilibili &#8599;</a>
+                <div class="handle">Bilibili Space</div>
+            </div>
+            <div class="contact-qr">
+                <div class="contact-qr-item">
+                    <img src="qr-wechat.jpg" alt="WeChat">
+                    <span>WeChat</span>
+                </div>
+                <div class="contact-qr-item">
+                    <img src="qr-xiaohongshu.jpg" alt="&#x5c0f;&#x7ea2;&#x4e66;">
+                    <span>&#x5c0f;&#x7ea2;&#x4e66;</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<footer class="footer">
+    <p>&#x00a9; 2026 2ero &#x00b7; <a href="https://www.instagram.com/2eroo_/" target="_blank">Instagram</a> &#x00b7; <a href="https://soundcloud.com/defen-waste" target="_blank">SoundCloud</a> &#x00b7; <a href="https://space.bilibili.com/353791121" target="_blank">Bilibili</a></p>
+</footer>
+<script>
+    const player = document.getElementById('mainPlayer');
+    const thumbs = document.querySelectorAll('.video-thumb');
+    thumbs.forEach(el => {
+        el.addEventListener('click', () => {
+            thumbs.forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            player.src = el.dataset.src;
+        });
+    });
+</script>
+<script src="radio.js"></script>
+</body>
+</html>
