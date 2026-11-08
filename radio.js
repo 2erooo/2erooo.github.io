@@ -19,11 +19,13 @@
     const panel = document.getElementById('radio-panel');
     const frame = document.getElementById('radio-frame');
     let selectedProgram = '3731920185';
+    const selectedByChannel = { neutral: '3731920185', negative: '3058668016' };
 
     function selectProgram(id) {
         const episode = episodes.find(item => item.dataset.program === id);
         if (!episode) return;
         selectedProgram = id;
+        selectedByChannel[episode.dataset.channel] = id;
         episodes.forEach(item => item.setAttribute('aria-pressed', String(item === episode)));
         const url = `https://music.163.com/outchain/player?type=3&id=${id}&auto=0&height=66`;
         if (frame.getAttribute('src') !== url) frame.src = url;
@@ -41,11 +43,12 @@
         panel.setAttribute('aria-labelledby', tab.id);
         document.getElementById('radio-description-zh').textContent = descriptions[channel].zh;
         document.getElementById('radio-description-en').textContent = descriptions[channel].en;
-        const available = channel === 'neutral';
+        const available = channel === 'neutral' || channel === 'negative';
+        episodes.forEach(item => { item.parentElement.hidden = item.dataset.channel !== channel; });
         document.getElementById('radio-episodes').hidden = !available;
         document.getElementById('radio-player').hidden = !available;
         document.getElementById('radio-empty').hidden = available;
-        if (available) selectProgram(selectedProgram);
+        if (available) selectProgram(selectedByChannel[channel]);
         else frame.removeAttribute('src');
     }
     tabs.forEach((tab, index) => {
