@@ -118,10 +118,12 @@
         .radio-episode small { display: block; font-size: .65rem; color: var(--text-faint); margin-top: 4px; }
         .radio-episode time { font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .radio-episode[aria-pressed="true"] strong::before { content: '●'; font-size: .5rem; margin-right: 10px; vertical-align: middle; }
-        .radio-player { margin-top: 24px; }
+        .radio-player { margin-top: 24px; display: flex; flex-direction: column; }
         .radio-player iframe { display: block; width: 100%; height: 86px; border: 0; }
         .radio-player-caption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .65rem; color: var(--text-faint); margin-top: 8px; }
         .radio-player-caption a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 4px; }
+        .radio-listen-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; border: 1px solid var(--border); }
+        .radio-mobile-help { display: none; }
         .radio-empty { font-size: .8rem; color: var(--text-faint); padding: 12px 0 32px; }
         .radio [hidden] { display: none !important; }
         .radio button:focus-visible, .radio a:focus-visible { outline: 2px solid var(--text); outline-offset: 5px; }
@@ -137,6 +139,10 @@
             .radio-description p { font-size: .84rem; }
             .radio-description .radio-en { font-size: .75rem; margin-top: 12px; }
             .radio-player-caption { font-size: .7rem; }
+            .radio-player-caption { order: -2; display: block; margin: 0 0 12px; }
+            .radio-player-caption > span { display: none; }
+            .radio-player-caption .radio-listen-link { width: 100%; background: var(--text); color: var(--bg, #fff); text-decoration: none; font-size: .85rem; }
+            .radio-mobile-help { display: block; order: -1; font-size: .75rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 16px; }
         }
         @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
@@ -208,7 +214,8 @@
                 <p class="radio-empty" id="radio-empty" hidden>这个频道的节目尚未加入本站。</p>
                 <div class="radio-player" id="radio-player">
                     <iframe id="radio-frame" title="Neutral Space #002 网易云音频播放器" src="https://music.163.com/outchain/player?type=3&amp;id=3731920185&amp;auto=0&amp;height=66" loading="lazy" allow="autoplay"></iframe>
-                    <div class="radio-player-caption"><span>点击播放器收听</span><a id="radio-source" href="https://music.163.com/program?id=3731920185" target="_blank" rel="noopener noreferrer">在网易云收听 ↗</a></div>
+                    <div class="radio-player-caption"><span>选好节目后，点击播放器的 ▶ 收听</span><a class="radio-listen-link" id="radio-source" href="https://music.163.com/program?id=3731920185" target="_blank" rel="noopener noreferrer">在网易云打开本期 ↗</a></div>
+                    <p class="radio-mobile-help">如果下方播放器没有响应，请点上方按钮前往网易云收听。</p>
                 </div>
                 <noscript><p><a href="https://music.163.com/program?id=3731702831">收听 Neutral Space #001</a></p></noscript>
             </div>
