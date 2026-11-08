@@ -19,7 +19,7 @@
     const panel = document.getElementById('radio-panel');
     const frame = document.getElementById('radio-frame');
     let selectedProgram = '3731920185';
-    const selectedByChannel = { neutral: '3731920185', negative: '3058668016' };
+    const selectedByChannel = { neutral: '3731920185', negative: '3058668016', positive: '2517928884' };
 
     function selectProgram(id) {
         const episode = episodes.find(item => item.dataset.program === id);
@@ -43,7 +43,8 @@
         panel.setAttribute('aria-labelledby', tab.id);
         document.getElementById('radio-description-zh').textContent = descriptions[channel].zh;
         document.getElementById('radio-description-en').textContent = descriptions[channel].en;
-        const available = channel === 'neutral' || channel === 'negative';
+        const available = Boolean(selectedByChannel[channel]);
+        document.getElementById('radio-episodes').setAttribute('aria-label', `${tab.textContent.trim().split('结构')[0].split('留白')[0].split('平衡')[0].trim()} 节目`);
         episodes.forEach(item => { item.parentElement.hidden = item.dataset.channel !== channel; });
         document.getElementById('radio-episodes').hidden = !available;
         document.getElementById('radio-player').hidden = !available;
